@@ -1,0 +1,14 @@
+lunamark
+<<<
+  * The first item of a bullet list
+
+    that spans several paragraphs,
+  * the second item of a bullet list,
+  * the third item of a bullet list.
+>>>
+<ul>
+<li><p>The first item of a bullet list</p>
+that spans several paragraphs,</li>
+<li>the second item of a bullet list,</li>
+<li><p>the third item of a bullet list.</p></li>
+</ul>

@@ -1,0 +1,11 @@
+lunamark
+<<<
+  * The first item of a bullet list,
+  * the second item of a bullet list,
+  * the third item of a bullet list.
+>>>
+<ul>
+<li>The first item of a bullet list,</li>
+<li>the second item of a bullet list,</li>
+<li>the third item of a bullet list.</li>
+</ul>

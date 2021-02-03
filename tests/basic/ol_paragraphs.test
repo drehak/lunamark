@@ -1,0 +1,18 @@
+lunamark
+<<<
+  1. The first item of an ordered list
+
+     that spans several paragraphs,
+  2. the second item of an ordered list,
+  3. the third item of an ordered list.
+  #. If you are feeling lazy,
+  #. you can use hash enumerators as well.
+>>>
+<ol type="1">
+<li><p>The first item of an ordered list</p>
+that spans several paragraphs,</li>
+<li>the second item of an ordered list,</li>
+<li>the third item of an ordered list.</li>
+<li>If you are feeling lazy,</li>
+<li><p>you can use hash enumerators as well.</p></li>
+</ol>
