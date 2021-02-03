@@ -98,7 +98,7 @@ end
 
 local function run_test(test)
   local expected = test.output
-  local actual = pipe(test.command, test.input)
+  local actual = pipe(test.command, pipe("pandoc -f markdown -t json", test.input))
   if normalize then
     actual = normalize_output(actual)
     expected = normalize_output(expected)
@@ -157,7 +157,7 @@ end
 
 local testdir = optarg.d or "tests"
 local pattern = arg[optind]
-cmdname = optarg.p or "bin/lunamark"
+cmdname = optarg.p or "bin/lunamark -f pandoc_json"
 testopts = optarg.o
 normalize = optarg.t
 
