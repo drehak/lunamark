@@ -39,6 +39,9 @@ It is slightly faster than the author's own C library
 
 # OPTIONS
 
+`--from,-f` *format*
+:   Specify format for output.
+    *format* can be `markdown` or `pandoc_json`.
 `--to,-t` *format*
 :   Specify format for output.
     *format* can be `html`, `html5`, `dzslides`, `docbook`, `latex`, `context`, or `man`.
@@ -353,6 +356,7 @@ local usage = [[
 Usage: lunamark [options] [file..] - convert markdown to other formats
 
 Options:
+  --from,-f FORMAT           Input format
   --to,-t FORMAT             Target format
   --layout,-l LAYOUT         Whitespace in output (default|compact|minimize)
   --extensions,-X EXTENSIONS Syntax extensions to use
@@ -396,6 +400,7 @@ defaults.
 ]]
 
 local long_opts = {
+  from = "f",
   to = "t",
   layout = "l",
   extensions = "X",
@@ -408,7 +413,7 @@ local long_opts = {
   help = "h"
 }
 
-local short_opts = "t:l:X:o:sT:d:0Vh"
+local short_opts = "f:t:l:X:o:sT:d:0Vh"
 
 local optarg,optind = alt_getopt.get_opts(arg, short_opts, long_opts)
 
@@ -422,11 +427,18 @@ if optarg.V then
   os.exit(0)
 end
 
+local from = optarg.f or "markdown"
+ensure_one_of("--from,-f", from,
+  {"markdown","pandoc_json"})
+
+-- remove when pandoc_json is implemented
+if from == "pandoc_json" then
+  lunamark.util.err("pandoc_json is not implemented yet", 5)
+end
+
 local to = optarg.t or "html"
 ensure_one_of("--to,-t", to,
   {"markdown","html","html5","dzslides","docbook","latex","context","man"})
-
-local reader = lunamark.reader.markdown
 
 local extensions = {  -- defaults
   containers = (to == "docbook" or to == "dzslides"),
@@ -437,6 +449,7 @@ local extensions = {  -- defaults
   notes = false,
   inline_notes = false,
   citations = false,
+  -- citation_nbsps = (from == "markdown"),
   citation_nbsps = true,
   definition_lists = false,
   fenced_code_blocks = false,
@@ -498,7 +511,12 @@ end
 
 local reader_options = extensions
 
-local parse = reader.new(writer, reader_options)
+local reader = lunamark.reader[from].new(writer, reader_options)
+if not reader then
+  lunamark.util.err("Unknown reader: " .. tostring(to), 5)
+end
+
+local reader = reader.new(writer, reader_options)
 
 local args = {}
 for i=optind,#arg do
@@ -524,7 +542,7 @@ if inp:find("\r",1,true) then
   inp = inp:gsub("\r\n","\n") -- convert DOS line endings
 end
 
-local body, metadata = parse(inp)
+local body, metadata = reader(inp)
 
 local standalone = optarg.s
 local template = optarg.T
