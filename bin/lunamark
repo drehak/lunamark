@@ -431,11 +431,6 @@ local from = optarg.f or "markdown"
 ensure_one_of("--from,-f", from,
   {"markdown","pandoc_json"})
 
--- remove when pandoc_json is implemented
-if from == "pandoc_json" then
-  lunamark.util.err("pandoc_json is not implemented yet", 5)
-end
-
 local to = optarg.t or "html"
 ensure_one_of("--to,-t", to,
   {"markdown","html","html5","dzslides","docbook","latex","context","man"})
@@ -515,8 +510,6 @@ local reader = lunamark.reader[from].new(writer, reader_options)
 if not reader then
   lunamark.util.err("Unknown reader: " .. tostring(to), 5)
 end
-
-local reader = reader.new(writer, reader_options)
 
 local args = {}
 for i=optind,#arg do
