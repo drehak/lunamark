@@ -1,0 +1,31 @@
+name: Test
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+jobs:
+  shellcheck:
+    name: Check shell scripts
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Run ShellCheck
+        uses: ludeeus/action-shellcheck@master
+  test:
+    name: Install Lunamark and test Pandoc JSON reader
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Install additional packages
+        run: |
+          set -ex
+          sudo apt -qy update
+          sudo apt -qy install pandoc lua5.1 liblua5.1-dev luarocks tidy
+          sudo luarocks install diff
+          sudo luarocks install luafilesystem
+      - name: Install Lunamark
+        run: sudo luarocks make
+      - name: Test Pandoc JSON reader
+        run: bin/shtest --prog 'lunamark -f pandoc_json' --dir tests/basic --tidy

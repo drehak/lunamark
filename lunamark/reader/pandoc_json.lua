@@ -1,4 +1,4 @@
-local json = require("json")
+local json = require("rxi-json-lua")
 local util = require("lunamark.util")
 
 local M = {}
