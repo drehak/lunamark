@@ -1,8 +1,8 @@
 package = "lunamark"
-version = "_VERSION-_REVISION"
+version = "0.5.0-1"
 source = {
     url = "git://github.com/jgm/lunamark",
-    tag = "_VERSION"
+    tag = "0.5.0"
 }
 description = {
    summary = "General markup format converter using lpeg.",
