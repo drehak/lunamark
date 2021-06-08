@@ -1,0 +1,10 @@
+lunamark
+<<<
+This is a normal paragraph:
+
+    This is a code block.
+>>>
+<p>This is a normal paragraph:</p>
+
+<pre><code>This is a code block.
+</code></pre>

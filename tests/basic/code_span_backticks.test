@@ -1,0 +1,9 @@
+lunamark
+<<<
+A single backtick in a code span: `` ` ``
+
+A backtick-delimited string in a code span: `` `foo` ``
+>>>
+<p>A single backtick in a code span: <code>`</code></p>
+
+<p>A backtick-delimited string in a code span: <code>`foo`</code></p>
