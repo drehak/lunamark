@@ -34,6 +34,7 @@ function M.new(writer, options)
   parsers = {
     Str = function(c) return c end,
     Space = function(c) return writer.space end,
+    Plain = function(c) return writer.plain(parse_blocks(c)) end,
     Para = function(c) return writer.paragraph(parse_blocks(c)) end,
     Emph = function(c) return writer.emphasis(parse_blocks(c)) end,
     Strong = function(c) return writer.strong(parse_blocks(c)) end,
@@ -41,6 +42,25 @@ function M.new(writer, options)
     Header = function(c)
       -- TODO handle attributes
       return writer.header(parse_blocks(c[3]), c[1])
+    end,
+
+    BulletList = function(c)
+      local blocks = {}
+      for i,inner in ipairs(c) do
+        table.insert(blocks, parse_blocks(inner))
+      end
+    return writer.bulletlist(blocks)
+    end,
+
+    OrderedList = function(c)
+      local blocks = {}
+      local tight = false
+      local startnum = c[1][1]
+
+      for i,inner in ipairs(c[2]) do
+        table.insert(blocks, parse_blocks(inner))
+      end
+    return writer.orderedlist(blocks, tight, startnum)
     end,
   }
 
