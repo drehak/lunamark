@@ -8,7 +8,17 @@ function M.new(writer, options)
 
   local parsers -- we fill this later
 
-  local function parse_block(block) return parsers[block.t](block.c) end
+  local function parse_block(block)
+    if block.t == nil then
+      util.err("field \"t\" missing in block table - is it a block?")
+    end
+    -- print(block.t)
+    local parser = parsers[block.t]
+    if parser == nil then
+      util.err("unknown block type '" .. block.t .. "'")
+    end
+    return parser(block.c)
+  end
 
   -- concat is an optional argument
   local function parse_blocks(blocks, concat)
