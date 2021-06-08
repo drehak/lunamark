@@ -3,6 +3,21 @@ local util = require("lunamark.util")
 
 local M = {}
 
+M.list_number_styles = {
+  Decimal = 1,
+  LowerRoman = 2,
+  UpperRoman = 3,
+  LowerAlpha = 4,
+  -- NOTE: Pandoc doesn't recognize upper alpha ordered lists as lists
+  UpperAlpha = 5,
+}
+
+M.list_number_delims = {
+  Period = 1,
+  OneParen = 2,
+  TwoParens = 3,
+}
+
 function M.new(writer, options)
   local options = options or {}
 
@@ -56,6 +71,17 @@ function M.new(writer, options)
       local blocks = {}
       local tight = false
       local startnum = c[1][1]
+      -- NOTE: writers don't handle number styles and delims yet
+      local number_style_str = c[1][2].t
+      local number_style = M.list_number_styles[number_style_str]
+      if number_style == nil then
+        util.err("unknown list number style '" .. number_style_str .. "'")
+      end
+      local number_delim_str = c[1][3].t
+      local number_delim = M.list_number_delims[number_delim_str]
+      if number_delim == nil then
+        util.err("unknown list number delim '" .. number_delim_str .. "'")
+      end
 
       for i,inner in ipairs(c[2]) do
         table.insert(blocks, parse_blocks(inner))
