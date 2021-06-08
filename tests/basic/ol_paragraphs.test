@@ -8,7 +8,7 @@ lunamark
   #. If you are feeling lazy,
   #. you can use hash enumerators as well.
 >>>
-<ol type="1">
+<ol>
 <li><p>The first item of an ordered list</p>
 that spans several paragraphs,</li>
 <li>the second item of an ordered list,</li>
