@@ -1,10 +1,10 @@
 lunamark
 <<<
-  6. The first item of an ordered list,
-  7. the second item of an ordered list,
-  8. the third item of an ordered list.
+  F. The first item of an ordered list,
+  G. the second item of an ordered list,
+  H. the third item of an ordered list.
 >>>
-<ol start="6">
+<ol start="6" type="5">
 <li>The first item of an ordered list,</li>
 <li>the second item of an ordered list,</li>
 <li>the third item of an ordered list.</li>
