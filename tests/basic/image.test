@@ -1,0 +1,9 @@
+lunamark
+<<<
+![Alt text](/path/to/img.jpg)
+
+![Alt text](/path/to/img.jpg "Optional title")
+>>>
+<p><img src="/path/to/img.jpg" alt="Alt text" /></p>
+
+<p><img src="/path/to/img.jpg" alt="Alt text" title="Optional title" /></p>

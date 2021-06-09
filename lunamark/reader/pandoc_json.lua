@@ -71,6 +71,21 @@ function M.new(writer, options)
     end,
 
     BlockQuote = function(c) return writer.blockquote(parse_blocks(c)) end,
+
+    Link = function(c)
+      local label = parse_blocks(c[2])
+      local uri = c[3][1]
+      local title = c[3][2]
+      return writer.link(label, uri, title)
+    end,
+
+    Image = function(c)
+      local label = parse_blocks(c[2])
+      local uri = c[3][1]
+      local title = c[3][2]
+      title = string.gsub(title, "fig:", "")
+      return writer.image(label, uri, title)
+    end,
   }
 
   local function parse_table(json_table)
