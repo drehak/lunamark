@@ -62,6 +62,13 @@ function M.new(writer, options)
       end
       return writer.orderedlist(blocks, tight, startnum)
     end,
+
+    Code = function(c) return writer.code(c[2]) end,
+    CodeBlock = function(c)
+      local info = ""
+      if c[1][2][1] then info = c[1][2][1] end
+      return writer.fenced_code(c[2], info)
+    end,
   }
 
   local function parse_table(json_table)
