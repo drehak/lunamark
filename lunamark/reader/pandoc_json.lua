@@ -69,6 +69,8 @@ function M.new(writer, options)
       if c[1][2][1] then info = c[1][2][1] end
       return writer.fenced_code(c[2], info)
     end,
+
+    BlockQuote = function(c) return writer.blockquote(parse_blocks(c)) end,
   }
 
   local function parse_table(json_table)
