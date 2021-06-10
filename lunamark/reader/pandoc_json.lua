@@ -45,6 +45,8 @@ function M.new(writer, options)
       return writer.header(text, level)
     end,
 
+    HorizontalRule = function(c) return writer.hrule end,
+
     BulletList = function(c)
       local blocks = {}
       for i,inner in ipairs(c) do
