@@ -40,8 +40,9 @@ function M.new(writer, options)
     Strong = function(c) return writer.strong(parse_blocks(c)) end,
 
     Header = function(c)
-      -- TODO handle attributes
-      return writer.header(parse_blocks(c[3]), c[1])
+      local level = c[1]
+      local text = parse_blocks(c[3])
+      return writer.header(text, level)
     end,
 
     BulletList = function(c)
