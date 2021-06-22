@@ -1,4 +1,4 @@
-lunamark
+pandoc -f markdown -t json|bin/lunamark -f pandoc_json
 <<<
   6. The first item of an ordered list,
   7. the second item of an ordered list,

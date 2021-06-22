@@ -21,7 +21,7 @@ local function do_matching_tests(path, patt, fun)
       elseif fpath:match(patt) and fpath:match("%.test$") then
         local fh = io.open(fpath, "r")
         local contents = fh:read("*all"):gsub("\r","")
-        local cmd, inp, out = contents:match("^([^\n]*)\n<<<[ \t]*\n(.-\n)>>>[ \t]*\n(.*)$")
+        local cmd, inp, out = contents:match("^([^\n]*)\n<<<[ \t]*\n?(.-\n)>>>[ \t]*\n(.*)$")
         assert(cmd ~= nil, "Command not found in " .. f)
         if cmdname then
           cmd = cmd:gsub("^%S+",cmdname)
@@ -81,14 +81,22 @@ end
 
 -- runs cmd on file containing inp and returns result
 local function pipe(cmd, inp)
-  local tmp = os.tmpname()
-  local tmph = io.open(tmp, "w")
-  tmph:write(inp)
-  tmph:close()
-  local outh = io.popen(cmd .. " " .. tmp,"r")
+  local outh
+  local tmp
+  if inp then
+    tmp = os.tmpname()
+    local tmph = io.open(tmp, "w")
+    tmph:write(inp)
+    tmph:close()
+    outh = io.popen(cmd .. " " .. tmp,"r")
+  else
+    outh = io.popen(cmd,"r")
+  end
   local result = outh:read("*all")
   outh:close()
-  os.remove(tmp)
+  if inp then
+    os.remove(tmp)
+  end
   return result
 end
 
@@ -98,7 +106,15 @@ end
 
 local function run_test(test)
   local expected = test.output
-  local actual = pipe(test.command, pipe("pandoc -f markdown -t json", test.input))
+  local actual = nil
+  local input = test.input
+  -- in case of empty input (newline), clean the variable to call pipe without an initial input
+  if input == "\n" then input = nil end
+
+  for command in string.gmatch(test.command, "[^|]*") do
+    actual = pipe(command, input)
+    input = actual
+  end
   if normalize then
     actual = normalize_output(actual)
     expected = normalize_output(expected)
@@ -157,7 +173,7 @@ end
 
 local testdir = optarg.d or "tests"
 local pattern = arg[optind]
-cmdname = optarg.p or "bin/lunamark -f pandoc_json"
+cmdname = optarg.p
 testopts = optarg.o
 normalize = optarg.t
 

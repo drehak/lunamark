@@ -1,4 +1,4 @@
-lunamark
+pandoc -f markdown -t json|bin/lunamark -f pandoc_json
 <<<
 A single backtick in a code span: `` ` ``
 
