@@ -279,6 +279,16 @@ function M.new(options)
     return util.intersperse(buffer,W.interblocksep)
   end
 
+  --- Subscript (string).
+  function W.subscript(s)
+    return {"_", s}
+  end
+
+  --- Superscript (string).
+  function W.superscript(s)
+    return {"^", s}
+  end
+
   --- A cosmo template to be used in producing a standalone document.
   -- `$body` is replaced with the document body, `$title` with the
   -- title, and so on.

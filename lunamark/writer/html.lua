@@ -173,6 +173,14 @@ function M.new(options)
     return {"<dl>", containersep, intersperse(buffer, containersep), containersep, "</dl>"}
   end
 
+  function Html.subscript(s)
+    return {"<sub>", s, "</sub>"}
+  end
+
+  function Html.superscript(s)
+    return {"<sup>", s, "</sup>"}
+  end
+
   Html.template = [[
 <html>
 <head>
