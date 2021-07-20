@@ -213,6 +213,14 @@ function M.new(options)
     return {"\\begin{description}\n",contents,"\n\\end{description}"}
   end
 
+  function LaTeX.subscript(s)
+    return {"\{textsubscript{",s,"}"}
+  end
+
+  function LaTeX.superscript(s)
+    return {"\{textsuperscript{",s,"}"}
+  end
+
   LaTeX.template = [===[
 \documentclass{article}
 \usepackage{amssymb,amsmath}

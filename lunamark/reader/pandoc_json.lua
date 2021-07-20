@@ -38,6 +38,8 @@ function M.new(writer, options)
     Para = function(c) return writer.paragraph(parse_blocks(c)) end,
     Emph = function(c) return writer.emphasis(parse_blocks(c)) end,
     Strong = function(c) return writer.strong(parse_blocks(c)) end,
+    Subscript = function(c) return writer.subscript(parse_blocks(c)) end,
+    Superscript = function(c) return writer.superscript(parse_blocks(c)) end,
 
     Header = function(c)
       local level = c[1]

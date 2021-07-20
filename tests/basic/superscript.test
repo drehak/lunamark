@@ -1,0 +1,4 @@
+pandoc -f docx -t json tests/basic/files/superscript.docx|bin/lunamark -f pandoc_json
+<<<
+>>>
+<p>Normal<sup>Super</sup></p>
