@@ -28,4 +28,4 @@ jobs:
       - name: Install Lunamark
         run: sudo luarocks make
       - name: Test Pandoc JSON reader
-        run: bin/shtest --dir tests/basic --tidy
+        run: bin/shtest --dir tests/basic --tidy --debug
