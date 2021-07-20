@@ -10,27 +10,34 @@ local function is_directory(path)
   return lfs.attributes(path, "mode") == "directory"
 end
 
-local function do_matching_tests(path, patt, fun)
+local function do_matching_tests(path, patt, fun, debug)
   local patt = patt or "."
   local result = {}
   for f in lfs.dir(path) do
     local fpath = path .. "/" .. f
     if f ~= "." and f ~= ".." then
       if is_directory(fpath) then
-        do_matching_tests(fpath, patt, fun)
+        do_matching_tests(fpath, patt, fun, debug)
       elseif fpath:match(patt) and fpath:match("%.test$") then
         local fh = io.open(fpath, "r")
         local contents = fh:read("*all"):gsub("\r","")
         local cmd, inp, out = contents:match("^([^\n]*)\n<<<[ \t]*\n?(.-\n)>>>[ \t]*\n(.*)$")
+        if debug then
+          print("cmd = \"" .. cmd .. "\"")
+          print("inp = \"" .. inp .. "\"")
+          print("out = \"" .. out .. "\"")
+        end
         assert(cmd ~= nil, "Command not found in " .. f)
         if cmdname then
           cmd = cmd:gsub("^%S+",cmdname)
+          if debug then print("new cmd (cmdname) = \"" .. cmd .. "\"") end
         end
         if testopts then
           cmd = cmd:gsub("%-.*$", testopts)
+          if debug then print("new cmd (testopts) = \"" .. cmd .. "\"") end
         end
         fun({ name = f:match("^(.*)%.test$"), path = fpath,
-              command = cmd, input = inp or "", output = out or ""})
+              command = cmd, input = inp or "", output = out or ""}, debug)
         fh:close()
       end
     end
@@ -104,7 +111,7 @@ local function normalize_output(s)
   return pipe("tidy --show-body-only yes --show-warnings no -utf8 -quiet", s)
 end
 
-local function run_test(test)
+local function run_test(test, debug)
   local expected = test.output
   local actual = nil
   local input = test.input
@@ -112,6 +119,7 @@ local function run_test(test)
   if input == "\n" then input = nil end
 
   for command in string.gmatch(test.command, "[^|]*") do
+    if debug then print("command \"" .. command .. "\" about to get piped") end
     actual = pipe(command, input)
     input = actual
   end
@@ -145,6 +153,7 @@ Options:
   --prog,-p CMD      Program to run for tests
   --opts,-o OPTS     Command-line options to use in tests
   --tidy,-t          Normalize output using html tidy
+  --debug,-D         Debug prints
   --version,-V       Version information
   --help,-h          This message
 ]]
@@ -154,11 +163,12 @@ local long_opts = {
   prog = "p",
   opts = "o",
   tidy = "t",
+  debug = "D",
   version = "V",
   help = "h"
 }
 
-local short_opts = "d:p:o:tVh"
+local short_opts = "d:p:o:tDVh"
 local optarg,optind = alt_getopt.get_opts(arg, short_opts, long_opts)
 
 if optarg.h then
@@ -171,12 +181,15 @@ if optarg.V then
   os.exit(0)
 end
 
+debug = false
+if optarg.D then debug = true end
+
 local testdir = optarg.d or "tests"
 local pattern = arg[optind]
 cmdname = optarg.p
 testopts = optarg.o
 normalize = optarg.t
 
-do_matching_tests(testdir, pattern, run_test)
+do_matching_tests(testdir, pattern, run_test, debug)
 io.write(string.format("Passed: %d\nFailed: %d\n", tests_passed, tests_failed))
 os.exit(tests_failed)
