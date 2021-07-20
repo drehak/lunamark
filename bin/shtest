@@ -118,6 +118,7 @@ local function run_test(test, debug)
   -- in case of empty input (newline), clean the variable to call pipe without an initial input
   if input == "\n" then input = nil end
 
+  if debug then print("test.command = \"" .. test.command .. "\"") end
   for command in string.gmatch(test.command, "[^|]+") do
     if debug then print("command \"" .. command .. "\" about to get piped") end
     actual = pipe(command, input)
