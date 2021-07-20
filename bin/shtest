@@ -119,6 +119,7 @@ local function run_test(test, debug)
   if input == "\n" then input = nil end
 
   for command in string.gmatch(test.command, "[^|]+") do
+    command = command:gsub("^%s*(.-)%s*$", "%1")
     if debug then print("command \"" .. command .. "\" about to get piped") end
     actual = pipe(command, input)
     input = actual

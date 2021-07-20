@@ -1,4 +1,4 @@
-pandoc -f markdown -t json|bin/lunamark -f pandoc_json
+pandoc -f markdown -t json | bin/lunamark -f pandoc_json
 <<<
   * The first item of a bullet list,
   * the second item of a bullet list,
